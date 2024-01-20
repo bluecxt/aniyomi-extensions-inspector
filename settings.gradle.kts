@@ -1,10 +1,4 @@
 dependencyResolutionManagement {
-    versionCatalogs {
-        create("androidcompat") {
-            from(files("gradle/androidcompat.versions.toml"))
-        }
-    }
-
     repositories {
         mavenCentral()
         google()

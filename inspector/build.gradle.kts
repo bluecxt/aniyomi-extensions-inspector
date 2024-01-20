@@ -6,27 +6,25 @@ import java.io.BufferedReader
 
 plugins {
     application
-    alias(libs.plugins.buildconfig)
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.kotlinter)
-    alias(libs.plugins.shadow)
+    alias(libs.plugins.shadowjar)
+    alias(libs.plugins.buildconfig)
 }
 
 dependencies {
-    // Dependencies of Aniyomi, some are duplicate from root build.gradle.kts
-    // keeping it here for reference
-    implementation(libs.injekt.core)
-    implementation(libs.jsoup)
-    implementation(libs.rxjava)
     implementation(libs.bundles.okhttp)
+    implementation(libs.bundles.tachiyomi)
 
     // AndroidCompat
     implementation(project(":AndroidCompat"))
     implementation(project(":AndroidCompat:Config"))
 }
 
+@Suppress("PropertyName")
 val MainClass = "inspector.MainKt"
+
 application {
     mainClass.set(MainClass)
 }
@@ -79,7 +77,7 @@ tasks {
                 mapOf(
                     "Main-Class" to MainClass,
                     "Implementation-Title" to rootProject.name,
-                    "Implementation-Vendor" to "The Tachiyomi Open Source Project",
+                    "Implementation-Vendor" to "The Keiyoushi Project",
                     "Specification-Version" to inspectorVersion,
                     "Implementation-Version" to inspectorRevision,
                 ),
