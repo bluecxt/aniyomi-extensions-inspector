@@ -13,7 +13,6 @@ kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref =
 
 coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
 coroutines-jdk8 = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-jdk8", version.ref = "coroutines" }
-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
 
 serialization-protobuf = { module = "org.jetbrains.kotlinx:kotlinx-serialization-protobuf", version.ref = "serialization" }
 serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization" }
@@ -22,7 +21,6 @@ serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-jso
 kodein = "org.kodein.di:kodein-di-conf-jvm:7.22.0"
 
 # Logging
-slf4japi = "org.slf4j:slf4j-api:2.0.13"
 logback = "ch.qos.logback:logback-classic:1.5.6"
 kotlinlogging = "io.github.oshai:kotlin-logging-jvm:7.0.0"
 
@@ -85,11 +83,9 @@ common = [
     "kotlin-reflect",
     "coroutines-core",
     "coroutines-jdk8",
-    "coroutines-test",
     "serialization-json",
     "serialization-protobuf",
     "kodein",
-    "slf4japi",
     "logback",
     "kotlinlogging",
     "rxjava",
