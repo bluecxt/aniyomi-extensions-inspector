@@ -28,13 +28,19 @@ private suspend fun Call.await(callStack: Array<StackTraceElement>): Response {
     return suspendCancellableCoroutine { continuation ->
         val callback =
             object : Callback {
-                override fun onResponse(call: Call, response: Response) {
+                override fun onResponse(
+                    call: Call,
+                    response: Response,
+                ) {
                     continuation.resume(response) {
                         response.body.close()
                     }
                 }
 
-                override fun onFailure(call: Call, e: IOException) {
+                override fun onFailure(
+                    call: Call,
+                    e: IOException,
+                ) {
                     // Don't bother with resuming the continuation if it is already cancelled.
                     if (continuation.isCancelled) return
                     val exception = IOException(e.message, e).apply { stackTrace = callStack }
@@ -73,10 +79,14 @@ suspend fun Call.awaitSuccess(): Response {
 }
 
 @Suppress("unused_parameter", "UnusedParameter")
-fun OkHttpClient.newCachelessCallWithProgress(request: Request, listener: ProgressListener): Call {
-    val progressClient = newBuilder()
-        .cache(null)
-        .build()
+fun OkHttpClient.newCachelessCallWithProgress(
+    request: Request,
+    listener: ProgressListener,
+): Call {
+    val progressClient =
+        newBuilder()
+            .cache(null)
+            .build()
 
     return progressClient.newCall(request)
 }
@@ -87,44 +97,44 @@ fun Call.asObservable(): Observable<Response> {
         val call = clone()
 
         // Wrap the call in a helper which handles both unsubscription and backpressure.
-        val requestArbiter = object : AtomicBoolean(), Producer, Subscription {
-            override fun request(n: Long) {
-                if (n == 0L || !compareAndSet(false, true)) return
+        val requestArbiter =
+            object : AtomicBoolean(), Producer, Subscription {
+                override fun request(n: Long) {
+                    if (n == 0L || !compareAndSet(false, true)) return
 
-                try {
-                    val response = call.execute()
-                    if (!subscriber.isUnsubscribed) {
-                        subscriber.onNext(response)
-                        subscriber.onCompleted()
-                    }
-                } catch (e: Exception) {
-                    if (!subscriber.isUnsubscribed) {
-                        subscriber.onError(e)
+                    try {
+                        val response = call.execute()
+                        if (!subscriber.isUnsubscribed) {
+                            subscriber.onNext(response)
+                            subscriber.onCompleted()
+                        }
+                    } catch (e: Exception) {
+                        if (!subscriber.isUnsubscribed) {
+                            subscriber.onError(e)
+                        }
                     }
                 }
-            }
 
-            override fun unsubscribe() {
-                call.cancel()
-            }
+                override fun unsubscribe() {
+                    call.cancel()
+                }
 
-            override fun isUnsubscribed(): Boolean {
-                return call.isCanceled()
+                override fun isUnsubscribed(): Boolean = call.isCanceled()
             }
-        }
 
         subscriber.add(requestArbiter)
         subscriber.setProducer(requestArbiter)
     }
 }
 
-fun Call.asObservableSuccess(): Observable<Response> {
-    return asObservable().doOnNext { response ->
+fun Call.asObservableSuccess(): Observable<Response> =
+    asObservable().doOnNext { response ->
         if (!response.isSuccessful) {
             response.close()
             throw HttpException(response.code)
         }
     }
-}
 
-class HttpException(val code: Int) : IllegalStateException("HTTP error $code")
+class HttpException(
+    val code: Int,
+) : IllegalStateException("HTTP error $code")

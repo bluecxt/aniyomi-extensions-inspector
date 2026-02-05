@@ -7,9 +7,7 @@ data class TorrentInfo(
     val size: Long,
     val trackers: List<String> = emptyList(),
 ) {
-    fun setTrackers(trackers: List<String>): TorrentInfo {
-        return TorrentInfo(title, files, hash, size, trackers)
-    }
+    fun setTrackers(trackers: List<String>): TorrentInfo = TorrentInfo(title, files, hash, size, trackers)
 }
 
 class DeadTorrentException : Exception()

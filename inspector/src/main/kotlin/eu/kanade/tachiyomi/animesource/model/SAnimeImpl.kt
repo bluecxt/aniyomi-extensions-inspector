@@ -1,7 +1,8 @@
+@file:Suppress("ktlint:standard:property-naming")
+
 package eu.kanade.tachiyomi.animesource.model
 
 class SAnimeImpl : SAnime {
-
     override lateinit var url: String
 
     override lateinit var title: String

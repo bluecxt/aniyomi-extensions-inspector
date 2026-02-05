@@ -1,9 +1,10 @@
+@file:Suppress("ktlint:standard:property-naming")
+
 package eu.kanade.tachiyomi.animesource.model
 
 import java.io.Serializable
 
 interface SEpisode : Serializable {
-
     var url: String
 
     var name: String
@@ -23,8 +24,6 @@ interface SEpisode : Serializable {
     }
 
     companion object {
-        fun create(): SEpisode {
-            return SEpisodeImpl()
-        }
+        fun create(): SEpisode = SEpisodeImpl()
     }
 }

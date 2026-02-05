@@ -1,9 +1,10 @@
+@file:Suppress("ktlint:standard:property-naming")
+
 package eu.kanade.tachiyomi.animesource.model
 
 import java.io.Serializable
 
 interface SAnime : Serializable {
-
     var url: String
 
     var title: String
@@ -63,8 +64,6 @@ interface SAnime : Serializable {
         const val CANCELLED = 5
         const val ON_HIATUS = 6
 
-        fun create(): SAnime {
-            return SAnimeImpl()
-        }
+        fun create(): SAnime = SAnimeImpl()
     }
 }

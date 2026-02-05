@@ -5,7 +5,10 @@ import eu.kanade.tachiyomi.network.ProgressListener
 import okhttp3.Headers
 import rx.subjects.Subject
 
-data class Track(val url: String, val lang: String)
+data class Track(
+    val url: String,
+    val lang: String,
+)
 
 open class Video(
     val url: String = "",
@@ -16,7 +19,6 @@ open class Video(
     val subtitleTracks: List<Track> = emptyList(),
     val audioTracks: List<Track> = emptyList(),
 ) : ProgressListener {
-
     @Suppress("UNUSED_PARAMETER")
     constructor(
         url: String,
@@ -56,11 +58,12 @@ open class Video(
     @Volatile
     var bytesDownloaded: Long = 0L
         set(value) {
-            totalBytesDownloaded += if (value < field) {
-                value
-            } else {
-                value - field
-            }
+            totalBytesDownloaded +=
+                if (value < field) {
+                    value
+                } else {
+                    value - field
+                }
             field = value
             statusCallback?.invoke(this)
         }
@@ -74,16 +77,21 @@ open class Video(
     @Transient
     private var statusCallback: ((Video) -> Unit)? = null
 
-    override fun update(bytesRead: Long, contentLength: Long, done: Boolean) {
+    override fun update(
+        bytesRead: Long,
+        contentLength: Long,
+        done: Boolean,
+    ) {
         bytesDownloaded = bytesRead
         if (contentLength > totalContentLength) {
             totalContentLength = contentLength
         }
-        val newProgress = if (totalContentLength > 0) {
-            (100 * totalBytesDownloaded / totalContentLength).toInt()
-        } else {
-            -1
-        }
+        val newProgress =
+            if (totalContentLength > 0) {
+                (100 * totalBytesDownloaded / totalContentLength).toInt()
+            } else {
+                -1
+            }
         if (progress != newProgress) progress = newProgress
     }
 

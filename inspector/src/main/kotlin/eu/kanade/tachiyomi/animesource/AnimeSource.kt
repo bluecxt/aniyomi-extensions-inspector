@@ -10,7 +10,6 @@ import tachiyomi.core.util.lang.awaitSingle
  * A basic interface for creating a source. It could be an online source, a local source, etc.
  */
 interface AnimeSource {
-
     /**
      * ID for the source. Must be unique.
      */
@@ -32,9 +31,7 @@ interface AnimeSource {
      * @return the updated anime.
      */
     @Suppress("DEPRECATION")
-    suspend fun getAnimeDetails(anime: SAnime): SAnime {
-        return fetchAnimeDetails(anime).awaitSingle()
-    }
+    suspend fun getAnimeDetails(anime: SAnime): SAnime = fetchAnimeDetails(anime).awaitSingle()
 
     /**
      * Get all the available episodes for a anime.
@@ -44,9 +41,7 @@ interface AnimeSource {
      * @return the episodes for the anime.
      */
     @Suppress("DEPRECATION")
-    suspend fun getEpisodeList(anime: SAnime): List<SEpisode> {
-        return fetchEpisodeList(anime).awaitSingle()
-    }
+    suspend fun getEpisodeList(anime: SAnime): List<SEpisode> = fetchEpisodeList(anime).awaitSingle()
 
     /**
      * Get the list of videos a episode has. Pages should be returned
@@ -57,28 +52,23 @@ interface AnimeSource {
      * @return the videos for the episode.
      */
     @Suppress("DEPRECATION")
-    suspend fun getVideoList(episode: SEpisode): List<Video> {
-        return fetchVideoList(episode).awaitSingle()
-    }
+    suspend fun getVideoList(episode: SEpisode): List<Video> = fetchVideoList(episode).awaitSingle()
 
     @Deprecated(
         "Use the non-RxJava API instead",
         ReplaceWith("getAnimeDetails"),
     )
-    fun fetchAnimeDetails(anime: SAnime): Observable<SAnime> =
-        throw IllegalStateException("Not used")
+    fun fetchAnimeDetails(anime: SAnime): Observable<SAnime> = throw IllegalStateException("Not used")
 
     @Deprecated(
         "Use the non-RxJava API instead",
         ReplaceWith("getEpisodeList"),
     )
-    fun fetchEpisodeList(anime: SAnime): Observable<List<SEpisode>> =
-        throw IllegalStateException("Not used")
+    fun fetchEpisodeList(anime: SAnime): Observable<List<SEpisode>> = throw IllegalStateException("Not used")
 
     @Deprecated(
         "Use the non-RxJava API instead",
         ReplaceWith("getVideoList"),
     )
-    fun fetchVideoList(episode: SEpisode): Observable<List<Video>> =
-        throw IllegalStateException("Not used")
+    fun fetchVideoList(episode: SEpisode): Observable<List<Video>> = throw IllegalStateException("Not used")
 }

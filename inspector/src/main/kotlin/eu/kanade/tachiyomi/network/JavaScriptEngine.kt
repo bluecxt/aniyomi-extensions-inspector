@@ -9,8 +9,9 @@ import eu.kanade.tachiyomi.util.lang.withIOContext
  */
 
 @Suppress("UNUSED_PARAMETER")
-class JavaScriptEngine(context: Context) {
-
+class JavaScriptEngine(
+    context: Context,
+) {
     /**
      * Evaluate arbitrary JavaScript code and get the result as a primtive type
      * (e.g., String, Int).
@@ -20,9 +21,10 @@ class JavaScriptEngine(context: Context) {
      * @return Result of JavaScript code as a primitive type.
      */
     @Suppress("UNUSED", "UNCHECKED_CAST")
-    suspend fun <T> evaluate(script: String): T = withIOContext {
-        QuickJs.create().use {
-            it.evaluate(script) as T
+    suspend fun <T> evaluate(script: String): T =
+        withIOContext {
+            QuickJs.create().use {
+                it.evaluate(script) as T
+            }
         }
-    }
 }

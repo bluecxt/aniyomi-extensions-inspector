@@ -6,7 +6,6 @@ import rx.Observable
 import tachiyomi.core.util.lang.awaitSingle
 
 interface AnimeCatalogueSource : AnimeSource {
-
     /**
      * An ISO 639-1 compliant language code (two letters in lower case).
      */
@@ -24,9 +23,7 @@ interface AnimeCatalogueSource : AnimeSource {
      * @param page the page number to retrieve.
      */
     @Suppress("DEPRECATION")
-    suspend fun getPopularAnime(page: Int): AnimesPage {
-        return fetchPopularAnime(page).awaitSingle()
-    }
+    suspend fun getPopularAnime(page: Int): AnimesPage = fetchPopularAnime(page).awaitSingle()
 
     /**
      * Get a page with a list of anime.
@@ -37,9 +34,11 @@ interface AnimeCatalogueSource : AnimeSource {
      * @param filters the list of filters to apply.
      */
     @Suppress("DEPRECATION")
-    suspend fun getSearchAnime(page: Int, query: String, filters: AnimeFilterList): AnimesPage {
-        return fetchSearchAnime(page, query, filters).awaitSingle()
-    }
+    suspend fun getSearchAnime(
+        page: Int,
+        query: String,
+        filters: AnimeFilterList,
+    ): AnimesPage = fetchSearchAnime(page, query, filters).awaitSingle()
 
     /**
      * Get a page with a list of latest anime updates.
@@ -48,9 +47,7 @@ interface AnimeCatalogueSource : AnimeSource {
      * @param page the page number to retrieve.
      */
     @Suppress("DEPRECATION")
-    suspend fun getLatestUpdates(page: Int): AnimesPage {
-        return fetchLatestUpdates(page).awaitSingle()
-    }
+    suspend fun getLatestUpdates(page: Int): AnimesPage = fetchLatestUpdates(page).awaitSingle()
 
     /**
      * Returns the list of filters for the source.
@@ -69,7 +66,11 @@ interface AnimeCatalogueSource : AnimeSource {
         "Use the non-RxJava API instead",
         ReplaceWith("getSearchAnime"),
     )
-    fun fetchSearchAnime(page: Int, query: String, filters: AnimeFilterList): Observable<AnimesPage>
+    fun fetchSearchAnime(
+        page: Int,
+        query: String,
+        filters: AnimeFilterList,
+    ): Observable<AnimesPage>
 
     // Should be replaced as soon as Anime Extension reach 1.5
     @Deprecated(

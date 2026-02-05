@@ -13,12 +13,14 @@ import okhttp3.OkHttpClient
 import java.util.concurrent.TimeUnit
 
 @Suppress("UNUSED_PARAMETER")
-class NetworkHelper(context: Context) {
-
+class NetworkHelper(
+    context: Context,
+) {
     val cookieManager = MemoryCookieJar()
 
     val client by lazy {
-        OkHttpClient.Builder()
+        OkHttpClient
+            .Builder()
             .cookieJar(cookieManager)
             .connectTimeout(30, TimeUnit.SECONDS)
             .readTimeout(30, TimeUnit.SECONDS)

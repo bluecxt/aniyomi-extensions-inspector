@@ -10,7 +10,6 @@ import eu.kanade.tachiyomi.animesource.model.SEpisode
  * @since extensions-lib 14
  */
 interface ResolvableAnimeSource : AnimeSource {
-
     /**
      * Returns what the given URI may open.
      * Returns [UriType.Unknown] if the source is not able to resolve the URI.
@@ -38,6 +37,8 @@ interface ResolvableAnimeSource : AnimeSource {
 
 sealed interface UriType {
     data object Anime : UriType
+
     data object Episode : UriType
+
     data object Unknown : UriType
 }

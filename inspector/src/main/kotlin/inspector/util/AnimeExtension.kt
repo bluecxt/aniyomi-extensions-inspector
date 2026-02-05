@@ -34,8 +34,9 @@ object AnimeExtension {
     ): Pair<String, List<AnimeHttpSource>> {
         val apkFile = fetcher()
 
-        val jarFile = File(tmpDir, "${apkFile.nameWithoutExtension}.jar")
-            .also(File::deleteOnExit)
+        val jarFile =
+            File(tmpDir, "${apkFile.nameWithoutExtension}.jar")
+                .also(File::deleteOnExit)
 
         val packageInfo = getPackageInfo(apkFile.absolutePath)
 
@@ -52,9 +53,11 @@ object AnimeExtension {
             )
         }
 
-        val className = packageInfo.packageName + packageInfo.applicationInfo.metaData.getString(
-            METADATA_SOURCE_CLASS,
-        )
+        val className =
+            packageInfo.packageName +
+                packageInfo.applicationInfo.metaData.getString(
+                    METADATA_SOURCE_CLASS,
+                )
 
         logger.trace { "Main class for extension is $className" }
 
@@ -64,14 +67,18 @@ object AnimeExtension {
         val instance = loadExtensionSources(jarFile, className)
 
         // collect sources from the extension
-        return packageInfo.packageName to when (instance) {
-            is AnimeSource -> listOf(instance).filterIsInstance<AnimeHttpSource>()
-            is AnimeSourceFactory -> instance.createSources().filterIsInstance<AnimeHttpSource>()
-            else -> throw RuntimeException("Unknown source class type! ${instance.javaClass}")
-        }
+        return packageInfo.packageName to
+            when (instance) {
+                is AnimeSource -> listOf(instance).filterIsInstance<AnimeHttpSource>()
+                is AnimeSourceFactory -> instance.createSources().filterIsInstance<AnimeHttpSource>()
+                else -> throw RuntimeException("Unknown source class type! ${instance.javaClass}")
+            }
     }
 
-    private fun extractAssetsFromApk(apkFile: File, jarFile: File) {
+    private fun extractAssetsFromApk(
+        apkFile: File,
+        jarFile: File,
+    ) {
         val tempJarFile = File("${jarFile.parent}/${jarFile.nameWithoutExtension}_temp.jar")
         ZipOutputStream(FileOutputStream(tempJarFile)).use { zos ->
 
@@ -82,8 +89,7 @@ object AnimeExtension {
                         zos.putNextEntry(ZipEntry(it.name))
                         try {
                             zis.copyTo(zos)
-                        }
-                        finally {
+                        } finally {
                             zos.closeEntry()
                         }
                     }
@@ -96,8 +102,7 @@ object AnimeExtension {
                         zos.putNextEntry(ZipEntry(it.name))
                         try {
                             zis.copyTo(zos)
-                        }
-                        finally {
+                        } finally {
                             zos.closeEntry()
                         }
                     }

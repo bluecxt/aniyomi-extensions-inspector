@@ -13,7 +13,6 @@ import org.jsoup.nodes.Element
  * A simple implementation for sources from a website using Jsoup, an HTML parser.
  */
 abstract class ParsedAnimeHttpSource : AnimeHttpSource() {
-
     /**
      * Parses the response from the site and returns a [AnimesPage] object.
      *
@@ -22,11 +21,14 @@ abstract class ParsedAnimeHttpSource : AnimeHttpSource() {
     override fun popularAnimeParse(response: Response): AnimesPage {
         val document = response.asJsoup()
 
-        val animes = document.select(popularAnimeSelector())
-            .map(::popularAnimeFromElement)
+        val animes =
+            document
+                .select(popularAnimeSelector())
+                .map(::popularAnimeFromElement)
 
-        val hasNextPage = popularAnimeNextPageSelector()
-            ?.let(document::selectFirst) != null
+        val hasNextPage =
+            popularAnimeNextPageSelector()
+                ?.let(document::selectFirst) != null
 
         return AnimesPage(animes, hasNextPage)
     }
@@ -58,11 +60,14 @@ abstract class ParsedAnimeHttpSource : AnimeHttpSource() {
     override fun searchAnimeParse(response: Response): AnimesPage {
         val document = response.asJsoup()
 
-        val animes = document.select(searchAnimeSelector())
-            .map(::searchAnimeFromElement)
+        val animes =
+            document
+                .select(searchAnimeSelector())
+                .map(::searchAnimeFromElement)
 
-        val hasNextPage = searchAnimeNextPageSelector()
-            ?.let(document::selectFirst) != null
+        val hasNextPage =
+            searchAnimeNextPageSelector()
+                ?.let(document::selectFirst) != null
 
         return AnimesPage(animes, hasNextPage)
     }
@@ -94,11 +99,14 @@ abstract class ParsedAnimeHttpSource : AnimeHttpSource() {
     override fun latestUpdatesParse(response: Response): AnimesPage {
         val document = response.asJsoup()
 
-        val animes = document.select(latestUpdatesSelector())
-            .map(::latestUpdatesFromElement)
+        val animes =
+            document
+                .select(latestUpdatesSelector())
+                .map(::latestUpdatesFromElement)
 
-        val hasNextPage = latestUpdatesNextPageSelector()
-            ?.let(document::selectFirst) != null
+        val hasNextPage =
+            latestUpdatesNextPageSelector()
+                ?.let(document::selectFirst) != null
 
         return AnimesPage(animes, hasNextPage)
     }
@@ -127,9 +135,7 @@ abstract class ParsedAnimeHttpSource : AnimeHttpSource() {
      *
      * @param response the response from the site.
      */
-    override fun animeDetailsParse(response: Response): SAnime {
-        return animeDetailsParse(response.asJsoup())
-    }
+    override fun animeDetailsParse(response: Response): SAnime = animeDetailsParse(response.asJsoup())
 
     /**
      * Returns the details of the anime from the given [document].
@@ -187,9 +193,7 @@ abstract class ParsedAnimeHttpSource : AnimeHttpSource() {
      *
      * @param response the response from the site.
      */
-    override fun videoUrlParse(response: Response): String {
-        return videoUrlParse(response.asJsoup())
-    }
+    override fun videoUrlParse(response: Response): String = videoUrlParse(response.asJsoup())
 
     /**
      * Returns the absolute url to the source image from the document.

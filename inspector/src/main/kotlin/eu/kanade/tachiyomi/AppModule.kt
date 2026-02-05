@@ -18,8 +18,9 @@ import uy.kohesive.injekt.api.addSingleton
 import uy.kohesive.injekt.api.addSingletonFactory
 
 @kotlinx.serialization.ExperimentalSerializationApi
-class AppModule(val app: Application) : InjektModule {
-
+class AppModule(
+    val app: Application,
+) : InjektModule {
     override fun InjektRegistrar.registerInjectables() {
         addSingleton(app)
 

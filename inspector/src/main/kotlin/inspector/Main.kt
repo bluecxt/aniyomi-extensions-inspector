@@ -43,22 +43,25 @@ suspend fun main(args: Array<String>) {
 
     val tmpDir = File(tmpDirPath, "tmp").also(File::mkdir)
     val extensions =
-        Files.find(Paths.get(apksPath), 2, { _, fileAttributes -> fileAttributes.isRegularFile })
+        Files
+            .find(Paths.get(apksPath), 2, { _, fileAttributes -> fileAttributes.isRegularFile })
             .asSequence()
             .filter { it.extension == "apk" }
             .toList()
 
     logger.info { "Found ${extensions.size} extensions" }
 
-    val extensionsInfo = coroutineScope {
-        extensions.map {
-            async {
-                logger.debug { "Installing $it" }
-                val (pkgName, sources) = AnimeExtension.installApk(tmpDir) { it.toFile() }
-                pkgName to sources.map(::SourceJson)
-            }
-        }.awaitAll()
-    }.toMap()
+    val extensionsInfo =
+        coroutineScope {
+            extensions
+                .map {
+                    async {
+                        logger.debug { "Installing $it" }
+                        val (pkgName, sources) = AnimeExtension.installApk(tmpDir) { it.toFile() }
+                        pkgName to sources.map(::SourceJson)
+                    }
+                }.awaitAll()
+        }.toMap()
 
     File(outputPath).writeText(Json.encodeToString(extensionsInfo))
 }
