@@ -7,3 +7,6 @@ local.properties
 # Ignore Gradle build output directory
 build
 
+test.apk
+output.json
+tmp/
