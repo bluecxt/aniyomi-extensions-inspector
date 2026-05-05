@@ -47,3 +47,4 @@ jobs:
           tags: true
           draft: true
           verbose: true
+          overwrite: true
