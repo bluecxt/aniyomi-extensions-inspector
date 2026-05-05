@@ -13,6 +13,8 @@ jobs:
   build:
     name: Build artifacts and create draft release
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
       - name: Checkout ${{ github.ref }}
