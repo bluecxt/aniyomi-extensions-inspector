@@ -54,6 +54,24 @@ interface AnimeSource {
     @Suppress("DEPRECATION")
     suspend fun getVideoList(episode: SEpisode): List<Video> = fetchVideoList(episode).awaitSingle()
 
+    /**
+     * Get the list of hosters an episode has.
+     *
+     * @since extensions-lib 16
+     * @param episode the episode.
+     * @return the hosters for the episode.
+     */
+    suspend fun getHosterList(episode: SEpisode): List<eu.kanade.tachiyomi.animesource.model.Hoster> = emptyList()
+
+    /**
+     * Get the list of videos a hoster has.
+     *
+     * @since extensions-lib 16
+     * @param hoster the hoster.
+     * @return the videos for the hoster.
+     */
+    suspend fun getVideoList(hoster: eu.kanade.tachiyomi.animesource.model.Hoster): List<Video> = emptyList()
+
     @Deprecated(
         "Use the non-RxJava API instead",
         ReplaceWith("getAnimeDetails"),

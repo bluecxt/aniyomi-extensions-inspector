@@ -229,10 +229,67 @@ abstract class AnimeHttpSource : AnimeCatalogueSource {
             .newCall(animeDetailsRequest(anime))
             .asObservableSuccess()
             .map { response ->
-                animeDetailsParse(response).apply { initialized = true }
+                animeDetailsParse(response)
             }
 
-    /**
+/**
+     * Get the list of hosters an episode has.
+     *
+     * @param episode the episode.
+     * @return the hosters for the episode.
+     */
+    override suspend fun getHosterList(episode: SEpisode): List<eu.kanade.tachiyomi.animesource.model.Hoster> {
+        val response = client.newCall(hosterListRequest(episode)).awaitSuccess()
+        return hosterListParse(response)
+    }
+
+/**
+     * Get the list of videos a hoster has.
+     *
+     * @param hoster the hoster.
+     * @return the videos for the hoster.
+     */
+    override suspend fun getVideoList(hoster: eu.kanade.tachiyomi.animesource.model.Hoster): List<Video> {
+        val response = client.newCall(videoListRequest(hoster)).awaitSuccess()
+        return videoListParse(response, hoster)
+    }
+
+/**
+     * Returns the request for the hoster list given the episode.
+     *
+     * @param episode the episode whose hoster list has to be fetched.
+     */
+    protected open fun hosterListRequest(episode: SEpisode): Request = GET(baseUrl + episode.url, headers)
+
+/**
+     * Parses the response from the site and returns a list of [Hoster] objects.
+     *
+     * @param response the response from the site.
+     */
+    protected open fun hosterListParse(response: Response): List<eu.kanade.tachiyomi.animesource.model.Hoster> =
+        throw UnsupportedOperationException()
+
+/**
+     * Returns the request for the video list given the hoster.
+     *
+     * @param hoster the hoster whose video list has to be fetched.
+     */
+    protected open fun videoListRequest(hoster: eu.kanade.tachiyomi.animesource.model.Hoster): Request = GET(hoster.internalData, headers)
+
+/**
+     * Parses the response from the site and returns a list of [Video] objects.
+     *
+     * @param response the response from the site.
+     * @param hoster the hoster of the videos.
+     */
+    protected open fun videoListParse(
+        response: Response,
+        hoster: eu.kanade.tachiyomi.animesource.model.Hoster,
+    ): List<Video> = throw UnsupportedOperationException()
+
+/**
+     * Get all the available episodes for a anime.
+
      * Returns the request for the details of an anime. Override only if it's needed to change the
      * url, send different headers or request method like POST.
      *
