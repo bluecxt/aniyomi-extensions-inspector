@@ -5,6 +5,9 @@ import android.content.Context
 
 @Suppress("EmptyFunctionBlock", "UnusedPrivateProperty")
 class WebView(private val context: Context) {
+    val settings: WebSettings = WebSettings()
+    var webViewClient: WebViewClient? = null
+
     fun clearCache(includeDiskFiles: Boolean) {}
 
     fun clearFormData() {}
