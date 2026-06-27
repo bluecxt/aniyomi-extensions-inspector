@@ -26,13 +26,17 @@ import xyz.nulldev.ts.config.ConfigKodeinModule
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.Paths
+import kotlin.io.path.absolutePathString
 import kotlin.io.path.extension
 import kotlin.streams.asSequence
+import kotlin.system.exitProcess
 
 private val logger = KotlinLogging.logger {}
 private val androidCompat by lazy { AndroidCompat() }
 
 suspend fun main(args: Array<String>) {
+    relaunchWithNoVerifyIfNeeded(args)
+
     if (args.size < 3) {
         throw RuntimeException("Inspector must be given the path of apks directory, output json, and a tmp dir")
     }
@@ -64,6 +68,39 @@ suspend fun main(args: Array<String>) {
         }.toMap()
 
     File(outputPath).writeText(Json.encodeToString(extensionsInfo))
+}
+
+private fun relaunchWithNoVerifyIfNeeded(args: Array<String>) {
+    if (System.getProperty("inspector.noverify.reexec") == "true") {
+        return
+    }
+
+    val javaExecutable = if (System.getProperty("os.name").startsWith("Windows")) "java.exe" else "java"
+    val javaBin =
+        Paths
+            .get(System.getProperty("java.home"), "bin", javaExecutable)
+            .absolutePathString()
+    val classPath = System.getProperty("java.class.path")
+    val command =
+        mutableListOf(
+            javaBin,
+            "-noverify",
+            "-Dinspector.noverify.reexec=true",
+        )
+
+    if (classPath.endsWith(".jar") && File(classPath).isFile) {
+        command += listOf("-jar", classPath)
+    } else {
+        command += listOf("-cp", classPath, "inspector.MainKt")
+    }
+    command += args
+
+    val exitCode =
+        ProcessBuilder(command)
+            .inheritIO()
+            .start()
+            .waitFor()
+    exitProcess(exitCode)
 }
 
 private fun initApplication() {
